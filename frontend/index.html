@@ -15,10 +15,8 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0f0f0f;
             color: #fff;
-            line-height: 1.5;
         }
 
-        /* Шапка */
         .header {
             border-bottom: 1px solid #222;
             padding: 15px 0;
@@ -50,6 +48,7 @@
             text-decoration: none;
             font-size: 0.95rem;
             transition: color 0.2s;
+            cursor: pointer;
         }
 
         .nav a:hover {
@@ -60,7 +59,6 @@
             color: #fff;
         }
 
-        /* Головний контейнер */
         .main {
             max-width: 1200px;
             margin: 60px auto;
@@ -70,7 +68,6 @@
             gap: 60px;
         }
 
-        /* Ліва колонка */
         .left-col {
             padding-right: 40px;
         }
@@ -104,6 +101,7 @@
             display: flex;
             gap: 30px;
             margin-top: 40px;
+            flex-wrap: wrap;
         }
 
         .feature-item {
@@ -117,7 +115,12 @@
             color: #fff;
         }
 
-        /* Права колонка */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
         .rate-card {
             background: #1a1a1a;
             border-radius: 20px;
@@ -163,7 +166,74 @@
             color: #fff;
         }
 
-        /* Модальне вікно входу */
+        /* Соціальний доказ */
+        .social-proof {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .stat-number.success {
+            color: #4caf50;
+        }
+
+        .stat-number.zero {
+            color: #ff4444;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .trust-badge {
+            margin-top: 20px;
+            padding: 15px;
+            background: #0f0f0f;
+            border-radius: 10px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .online-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* Модальне вікно */
         .modal {
             display: none;
             position: fixed;
@@ -174,6 +244,7 @@
             background: rgba(0,0,0,0.9);
             justify-content: center;
             align-items: center;
+            z-index: 1000;
         }
 
         .modal.active {
@@ -262,33 +333,33 @@
         <div class="header-content">
             <a href="#" class="logo">SWAP POINTS</a>
             <div class="nav">
-                <a href="#" class="active">Курсы валют</a>
-                <a href="#" onclick="showLoginModal()">Вход</a>
-                <a href="#" onclick="showLoginModal()">Регистрация</a>
+                <a href="#" class="active">Курси валют</a>
+                <a href="#" onclick="showLoginModal()">Вхід</a>
+                <a href="#" onclick="showLoginModal()">Реєстрація</a>
             </div>
         </div>
     </div>
 
     <div class="main">
         <div class="left-col">
-            <div class="badge">НАШ КРИПТООБМЕННИК</div>
+            <div class="badge">НАШ КРИПТООБМІННИК</div>
             <h1>SWAP POINTS<br><span>КРИПТОВАЛЮТ</span></h1>
             <p class="description">
-                Просто, автоматически и никаких скрытых комиссий. 
-                Простой способ обмена криптовалюты в режиме онлайн.
+                Просто, автоматично і без прихованих комісій. 
+                Простий спосіб обміну криптовалюти в режимі онлайн.
             </p>
             <div class="features">
                 <div class="feature-item">FAQ</div>
-                <div class="feature-item">Офлайн обмен</div>
-                <div class="feature-item">Новости</div>
-                <div class="feature-item">Контакты</div>
+                <div class="feature-item">Офлайн обмін</div>
+                <div class="feature-item">Новини</div>
+                <div class="feature-item">Контакти</div>
             </div>
         </div>
 
         <div class="right-col">
             <div class="rate-card">
                 <div class="rate-item">
-                    <span class="rate-label">USD</span>
+                    <span class="rate-label">USDT</span>
                     <span class="rate-value" id="usdtRate">46.00</span>
                 </div>
                 <div class="rate-item">
@@ -296,8 +367,31 @@
                     <span class="rate-value" id="tonRate">80.00</span>
                 </div>
                 <div class="rate-note">
-                    Все комиссии уже учтены. 
-                    <a href="#" onclick="showLoginModal()">Узнать на сайте</a>
+                    Всі комісії вже враховані. 
+                    <a href="#" onclick="showLoginModal()">Дізнатись на сайті</a>
+                </div>
+            </div>
+
+            <!-- Соціальний доказ -->
+            <div class="social-proof">
+                <div class="stats-grid">
+                    <div>
+                        <div class="stat-number success" id="successfulExchanges">1 243</div>
+                        <div class="stat-label">успішних обмінів</div>
+                    </div>
+                    <div>
+                        <div class="stat-number zero">0</div>
+                        <div class="stat-label">скарг</div>
+                    </div>
+                </div>
+                
+                <div class="trust-badge">
+                    ⚡ Працюємо з 2024 року • 100% гарантія виплат
+                </div>
+                
+                <div class="online-indicator">
+                    <span class="dot"></span>
+                    <span id="onlineNow">128</span> людей зараз на сайті
                 </div>
             </div>
         </div>
@@ -306,17 +400,19 @@
     <!-- Модальне вікно входу -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <h2 class="modal-title">Вход</h2>
-            <input type="text" class="modal-input" id="phoneNumber" placeholder="Номер телефона" value="+380">
-            <button class="modal-btn" onclick="login()">Войти</button>
-            <button class="modal-btn secondary" onclick="quickExchange()">Продолжить без регистрации</button>
+            <h2 class="modal-title">Вхід</h2>
+            <input type="text" class="modal-input" id="phoneNumber" placeholder="Номер телефону" value="+380">
+            <button class="modal-btn" onclick="login()">Увійти</button>
+            <button class="modal-btn secondary" onclick="quickExchange()">Продовжити без реєстрації</button>
             <div class="modal-link">
-                <a href="#" onclick="hideLoginModal()">Закрыть</a>
+                <a href="#" onclick="hideLoginModal()">Закрити</a>
             </div>
         </div>
     </div>
 
     <script>
+        let currentRate = { USDT: 46, TON: 80 };
+
         function showLoginModal() {
             document.getElementById('loginModal').classList.add('active');
         }
@@ -355,6 +451,7 @@
             try {
                 const response = await fetch('/api/rates');
                 const data = await response.json();
+                currentRate = data;
                 document.getElementById('usdtRate').textContent = data.USDT.toFixed(2);
                 document.getElementById('tonRate').textContent = data.TON.toFixed(2);
             } catch (error) {
@@ -362,12 +459,37 @@
             }
         }
 
-        loadRates();
+        // Функція для оновлення соціального доказу
+        async function updateSocialProof() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                const exchangeEl = document.getElementById('successfulExchanges');
+                if (exchangeEl) {
+                    exchangeEl.textContent = data.totalExchanges.toLocaleString();
+                }
+                
+                // Онлайн користувачі
+                const onlineEl = document.getElementById('onlineNow');
+                if (onlineEl) {
+                    const online = Math.floor(Math.random() * 50) + 100;
+                    onlineEl.textContent = online;
+                }
+            } catch (error) {
+                console.log('Використовуються стандартні значення');
+            }
+        }
 
+        // Перевіряємо чи користувач вже залогінений
         const savedUser = localStorage.getItem('swapUser');
         if (savedUser) {
             window.location.href = '/frontend/profile.html';
         }
+
+        loadRates();
+        updateSocialProof();
+        setInterval(updateSocialProof, 30000); // Оновлюємо кожні 30 секунд
     </script>
 </body>
 </html>
