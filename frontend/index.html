@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swap Points | Обмін криптовалют</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        /* Шапка */
+        .header {
+            border-bottom: 1px solid #222;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover {
+            color: #fff;
+        }
+
+        .nav a.active {
+            color: #fff;
+        }
+
+        /* Головний контейнер */
+        .main {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        /* Ліва колонка */
+        .left-col {
+            padding-right: 40px;
+        }
+
+        .badge {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+            color: #555;
+        }
+
+        .description {
+            color: #888;
+            font-size: 1rem;
+            max-width: 450px;
+            margin-bottom: 40px;
+        }
+
+        .features {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-item {
+            color: #888;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .feature-item:hover {
+            color: #fff;
+        }
+
+        /* Права колонка */
+        .rate-card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .rate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .rate-item:last-child {
+            border-bottom: none;
+        }
+
+        .rate-label {
+            font-size: 1rem;
+            color: #888;
+        }
+
+        .rate-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .rate-note {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .rate-note a {
+            color: #888;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+        }
+
+        .rate-note a:hover {
+            color: #fff;
+        }
+
+        /* Модальне вікно входу */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            max-width: 400px;
+            width: 90%;
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 15px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .modal-btn:hover {
+            opacity: 0.9;
+        }
+
+        .modal-btn.secondary {
+            background: #0f0f0f;
+            color: #fff;
+            border: 1px solid #333;
+            margin-top: 10px;
+        }
+
+        .modal-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .modal-link a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="#" class="logo">SWAP POINTS</a>
+            <div class="nav">
+                <a href="#" class="active">Курсы валют</a>
+                <a href="#" onclick="showLoginModal()">Вход</a>
+                <a href="#" onclick="showLoginModal()">Регистрация</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="left-col">
+            <div class="badge">НАШ КРИПТООБМЕННИК</div>
+            <h1>SWAP POINTS<br><span>КРИПТОВАЛЮТ</span></h1>
+            <p class="description">
+                Просто, автоматически и никаких скрытых комиссий. 
+                Простой способ обмена криптовалюты в режиме онлайн.
+            </p>
+            <div class="features">
+                <div class="feature-item">FAQ</div>
+                <div class="feature-item">Офлайн обмен</div>
+                <div class="feature-item">Новости</div>
+                <div class="feature-item">Контакты</div>
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="rate-card">
+                <div class="rate-item">
+                    <span class="rate-label">USD</span>
+                    <span class="rate-value" id="usdtRate">46.00</span>
+                </div>
+                <div class="rate-item">
+                    <span class="rate-label">TON</span>
+                    <span class="rate-value" id="tonRate">80.00</span>
+                </div>
+                <div class="rate-note">
+                    Все комиссии уже учтены. 
+                    <a href="#" onclick="showLoginModal()">Узнать на сайте</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно входу -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Вход</h2>
+            <input type="text" class="modal-input" id="phoneNumber" placeholder="Номер телефона" value="+380">
+            <button class="modal-btn" onclick="login()">Войти</button>
+            <button class="modal-btn secondary" onclick="quickExchange()">Продолжить без регистрации</button>
+            <div class="modal-link">
+                <a href="#" onclick="hideLoginModal()">Закрыть</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function hideLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function quickExchange() {
+            window.location.href = '/frontend/exchange.html';
+        }
+
+        async function login() {
+            const phone = document.getElementById('phoneNumber').value;
+            if (!phone || phone.length < 10) {
+                alert('Введіть коректний номер телефону');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone })
+                });
+                
+                const user = await response.json();
+                localStorage.setItem('swapUser', JSON.stringify(user));
+                window.location.href = '/frontend/profile.html';
+            } catch (error) {
+                alert('Помилка входу');
+            }
+        }
+
+        async function loadRates() {
+            try {
+                const response = await fetch('/api/rates');
+                const data = await response.json();
+                document.getElementById('usdtRate').textContent = data.USDT.toFixed(2);
+                document.getElementById('tonRate').textContent = data.TON.toFixed(2);
+            } catch (error) {
+                console.log('Стандартний курс');
+            }
+        }
+
+        loadRates();
+
+        const savedUser = localStorage.getItem('swapUser');
+        if (savedUser) {
+            window.location.href = '/frontend/profile.html';
+        }
+    </script>
+</body>
+</html>

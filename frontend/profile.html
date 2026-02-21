@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swap Points | Кабінет</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+        }
+
+        .header {
+            border-bottom: 1px solid #222;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav a:hover {
+            color: #fff;
+        }
+
+        .nav a.active {
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Баланс */
+        .balance-card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #222;
+        }
+
+        .balance-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-amount {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .balance-usd {
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        /* Кнопки */
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn:hover {
+            background: #333;
+        }
+
+        .btn-primary:hover {
+            background: #fff;
+            opacity: 0.9;
+        }
+
+        /* Історія */
+        .history-section {
+            background: #1a1a1a;
+            border: 1px solid #222;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .history-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            padding: 15px 20px;
+            background: #0f0f0f;
+            border: 1px solid #222;
+            border-radius: 10px;
+            align-items: center;
+        }
+
+        .history-item.header {
+            background: transparent;
+            color: #888;
+            font-size: 0.9rem;
+            border: none;
+        }
+
+        .status-success {
+            color: #4caf50;
+        }
+
+        .status-pending {
+            color: #ff9800;
+        }
+
+        /* Модальні вікна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .address-box {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: monospace;
+            word-break: break-all;
+            margin-bottom: 20px;
+            color: #888;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="/frontend/index.html" class="logo">SWAP POINTS</a>
+            <div class="nav">
+                <a href="/frontend/exchange.html">Обмен</a>
+                <a class="active">Кабинет</a>
+                <a onclick="logout()">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Баланс -->
+        <div class="balance-card">
+            <div class="balance-label">Ваш баланс</div>
+            <div class="balance-amount" id="balanceUSDT">0 USDT</div>
+            <div class="balance-usd" id="balanceUAH">0 UAH</div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Всего обменов</div>
+                <div class="stat-value" id="totalExchanges">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Обменяно UAH</div>
+                <div class="stat-value" id="totalExchangedUAH">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Курс USDT</div>
+                <div class="stat-value" id="currentRate">46</div>
+            </div>
+        </div>
+
+        <!-- Кнопки дій -->
+        <div class="actions">
+            <button class="btn btn-primary" onclick="showDepositModal()">
+                <span>+</span> Пополнить баланс
+            </button>
+            <button class="btn" onclick="showWithdrawModal()">
+                <span>💳</span> Вывести на карту
+            </button>
+            <button class="btn" onclick="window.location.href='/frontend/exchange.html'">
+                <span>🔄</span> Быстрый обмен
+            </button>
+        </div>
+
+        <!-- Історія -->
+        <div class="history-section">
+            <div class="history-title">История операций</div>
+            <div class="history-list" id="historyList">
+                <div class="history-item header">
+                    <div>Дата</div>
+                    <div>Тип</div>
+                    <div>Сумма</div>
+                    <div>Статус</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно поповнення -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <div class="modal-title">Пополнение баланса</div>
+            <p style="color: #888; margin-bottom: 20px;">Отправьте USDT на этот адрес:</p>
+            <div class="address-box" id="depositAddress">UQCS3J9NntTQTrhpmYcCk45tO3iH2H-6vq5fqqrqKCGhT8bG</div>
+            <input type="number" id="depositAmount" class="modal-input" placeholder="Сумма в USDT">
+            <p style="color: #888; margin-bottom: 20px;">После отправки нажмите "Я отправил"</p>
+            <div class="modal-buttons">
+                <button class="btn" onclick="hideDepositModal()">Отмена</button>
+                <button class="btn btn-primary" onclick="confirmDeposit()">Я отправил</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно виведення -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <div class="modal-title">Вывод на карту</div>
+            <input type="number" id="withdrawAmount" class="modal-input" placeholder="Сумма в USDT">
+            <input type="text" id="withdrawCard" class="modal-input" placeholder="Номер карты">
+            <p style="color: #888; margin-bottom: 20px;">Вы получите: <span id="withdrawUAH">0 UAH</span></p>
+            <div class="modal-buttons">
+                <button class="btn" onclick="hideWithdrawModal()">Отмена</button>
+                <button class="btn btn-primary" onclick="withdraw()">Вывести</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let currentRate = { USDT: 46, TON: 80 };
+
+        function logout() {
+            localStorage.removeItem('swapUser');
+            window.location.href = '/frontend/index.html';
+        }
+
+        async function checkAuth() {
+            const savedUser = localStorage.getItem('swapUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loadUserData();
+            } else {
+                window.location.href = '/frontend/index.html';
+            }
+        }
+
+        async function loadUserData() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`/api/user/${currentUser.id}`);
+                const data = await response.json();
+                
+                document.getElementById('balanceUSDT').textContent = data.balanceUSDT + ' USDT';
+                document.getElementById('balanceUAH').textContent = data.balanceUAH + ' UAH';
+                document.getElementById('totalExchanges').textContent = data.totalExchanges;
+                document.getElementById('totalExchangedUAH').textContent = data.totalExchangedUAH;
+
+                const rateRes = await fetch('/api/rates');
+                const rates = await rateRes.json();
+                currentRate = rates;
+                document.getElementById('currentRate').textContent = rates.USDT;
+
+                const historyRes = await fetch(`/api/user/${currentUser.id}/history`);
+                const history = await historyRes.json();
+                displayHistory(history);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayHistory(history) {
+            const list = document.getElementById('historyList');
+            
+            if (history.length === 0) {
+                list.innerHTML = '<div class="history-item">История пуста</div>';
+                return;
+            }
+
+            list.innerHTML = '<div class="history-item header"><div>Дата</div><div>Тип</div><div>Сумма</div><div>Статус</div></div>' +
+                history.map(item => `
+                    <div class="history-item">
+                        <div>${new Date(item.date).toLocaleString()}</div>
+                        <div>${item.type === 'deposit' ? 'Пополнение' : 'Вывод'}</div>
+                        <div>${item.amount} ${item.currency}</div>
+                        <div class="status-${item.status}">${item.status === 'pending' ? '⏳ В обработке' : '✅ Подтверждено'}</div>
+                    </div>
+                `).join('');
+        }
+
+        function showDepositModal() {
+            document.getElementById('depositModal').classList.add('active');
+        }
+
+        function hideDepositModal() {
+            document.getElementById('depositModal').classList.remove('active');
+        }
+
+        function showWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('active');
+        }
+
+        function hideWithdrawModal() {
+            document.getElementById('withdrawModal').classList.remove('active');
+        }
+
+        async function confirmDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            
+            if (!amount || amount <= 0) {
+                alert('Введите сумму');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/deposit/request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        amount: amount
+                    })
+                });
+
+                const result = await response.json();
+                alert('✅ Заявка на пополнение создана! После подтверждения администратором баланс будет зачислен.');
+                hideDepositModal();
+            } catch (error) {
+                alert('❌ Ошибка создания заявки');
+            }
+        }
+
+        document.getElementById('withdrawAmount').addEventListener('input', function(e) {
+            const usdt = parseFloat(e.target.value) || 0;
+            const uah = usdt * currentRate.USDT;
+            document.getElementById('withdrawUAH').textContent = uah.toFixed(2) + ' UAH';
+        });
+
+        async function withdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const card = document.getElementById('withdrawCard').value;
+
+            if (!amount || amount <= 0) {
+                alert('Введите сумму');
+                return;
+            }
+
+            if (!card || card.length < 16) {
+                alert('Введите корректный номер карты');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/withdraw', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        amount,
+                        card
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('✅ Заявка на вывод создана!');
+                    hideWithdrawModal();
+                    loadUserData();
+                } else {
+                    alert(result.error || '❌ Ошибка');
+                }
+            } catch (error) {
+                alert('❌ Ошибка создания заявки');
+            }
+        }
+
+        checkAuth();
+        setInterval(loadUserData, 10000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swap Points | Админ панель</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+        }
+
+        .header {
+            border-bottom: 1px solid #222;
+            padding: 20px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .rates-panel {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+
+        .rates-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .rate-inputs {
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .rate-field {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .rate-field label {
+            display: block;
+            margin-bottom: 10px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .rate-field input {
+            width: 100%;
+            padding: 15px;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .rate-field input:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .table {
+            background: #1a1a1a;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr 1fr;
+            padding: 20px;
+            background: #0f0f0f;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr 1fr;
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            align-items: center;
+        }
+
+        .status-pending {
+            color: #f1c40f;
+        }
+
+        .status-received {
+            color: #3498db;
+        }
+
+        .status-confirmed {
+            color: #2ecc71;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .btn-small:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">SWAP POINTS | АДМИН</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Панель управления</h1>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Всего заявок</div>
+                <div class="stat-value" id="totalOrders">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Пользователей</div>
+                <div class="stat-value" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Транзакций</div>
+                <div class="stat-value" id="totalTransactions">0</div>
+            </div>
+        </div>
+
+        <div class="rates-panel">
+            <div class="rates-title">Управление курсами</div>
+            <div class="rate-inputs">
+                <div class="rate-field">
+                    <label>USDT/UAH</label>
+                    <input type="number" id="usdtRate" step="0.1" value="46">
+                </div>
+                <div class="rate-field">
+                    <label>TON/UAH</label>
+                    <input type="number" id="tonRate" step="0.1" value="80">
+                </div>
+                <button class="btn" onclick="updateRates()">Обновить курсы</button>
+            </div>
+        </div>
+
+        <div class="table">
+            <div class="table-header">
+                <div>ID заявки</div>
+                <div>Направление</div>
+                <div>Сумма</div>
+                <div>Курс</div>
+                <div>Карта</div>
+                <div>Статус</div>
+                <div>Действия</div>
+            </div>
+            <div id="ordersList"></div>
+        </div>
+    </div>
+
+    <script>
+        async function loadData() {
+            try {
+                const ordersRes = await fetch('/api/admin/orders');
+                const orders = await ordersRes.json();
+                
+                document.getElementById('totalOrders').textContent = orders.length;
+                
+                const list = document.getElementById('ordersList');
+                list.innerHTML = orders.map(order => `
+                    <div class="table-row">
+                        <div>${order.orderId}</div>
+                        <div>${order.direction.replace('_TO_', ' → ')}</div>
+                        <div>${order.amount}</div>
+                        <div>${order.rate}</div>
+                        <div>${order.cardNumber}</div>
+                        <div class="status-${order.status}">${getStatusText(order.status)}</div>
+                        <div>
+                            ${order.status === 'pending' ? `<button class="btn-small" onclick="markReceived('${order.orderId}')">Отримано</button>` : ''}
+                            ${order.status === 'received' ? `<button class="btn-small" onclick="confirmOrder('${order.orderId}')">Підтвердити</button>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+
+                const usersRes = await fetch('/api/admin/users');
+                const users = await usersRes.json();
+                document.getElementById('totalUsers').textContent = users.length;
+
+                const transactionsRes = await fetch('/api/admin/transactions');
+                const transactions = await transactionsRes.json();
+                document.getElementById('totalTransactions').textContent = transactions.length;
+
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+            }
+        }
+
+        function getStatusText(status) {
+            const map = {
+                'pending': '⏳ Ожидает',
+                'received': '🔵 Получен',
+                'confirmed': '✅ Подтвержден',
+                'expired': '⌛ Просрочен'
+            };
+            return map[status] || status;
+        }
+
+        async function markReceived(orderId) {
+            await fetch(`/api/admin/order/${orderId}/received`, { method: 'POST' });
+            loadData();
+        }
+
+        async function confirmOrder(orderId) {
+            await fetch(`/api/admin/order/${orderId}/confirm`, { method: 'POST' });
+            loadData();
+        }
+
+        async function updateRates() {
+            const usdt = parseFloat(document.getElementById('usdtRate').value);
+            const ton = parseFloat(document.getElementById('tonRate').value);
+
+            await fetch('/api/rates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ USDT: usdt, TON: ton })
+            });
+
+            alert('Курсы обновлены!');
+        }
+
+        loadData();
+        setInterval(loadData, 5000);
+    </script>
+</body>
+</html>

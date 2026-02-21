@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swap Points | Обмін</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+        }
+
+        .header {
+            border-bottom: 1px solid #222;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav a:hover {
+            color: #fff;
+        }
+
+        .nav a.active {
+            color: #fff;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .exchange-form {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .input-group input,
+        .input-group select {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+        }
+
+        .input-group span {
+            padding: 0 15px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .order-status {
+            margin-top: 30px;
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .order-status h3 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .order-status p {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #888;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .rates {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .rate-card {
+            flex: 1;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .rate-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .rate-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="/frontend/index.html" class="logo">SWAP POINTS</a>
+            <div class="nav">
+                <a href="/frontend/index.html">Курсы валют</a>
+                <a href="#" onclick="goToProfile()">Кабинет</a>
+                <a href="#" onclick="logout()">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Обмен валют</h1>
+        <p class="subtitle">Мгновенный обмен по лучшему курсу</p>
+
+        <div class="rates">
+            <div class="rate-card">
+                <div class="rate-label">USDT/UAH</div>
+                <div class="rate-value" id="usdtRate">46.00</div>
+            </div>
+            <div class="rate-card">
+                <div class="rate-label">TON/UAH</div>
+                <div class="rate-value" id="tonRate">80.00</div>
+            </div>
+        </div>
+
+        <div class="exchange-form">
+            <div class="form-group">
+                <label>Направление обмена</label>
+                <div class="input-group">
+                    <select id="direction">
+                        <option value="USDT_TO_UAH">USDT → UAH</option>
+                        <option value="TON_TO_UAH">TON → UAH</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Вы отправляете</label>
+                <div class="input-group">
+                    <input type="number" id="sendAmount" placeholder="100" value="100">
+                    <span id="sendCurrency">USDT</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Вы получаете</label>
+                <div class="input-group">
+                    <input type="number" id="receiveAmount" placeholder="4600" readonly>
+                    <span>UAH</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Номер карты</label>
+                <div class="input-group">
+                    <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000">
+                </div>
+            </div>
+
+            <button id="createOrderBtn" class="btn">Создать заявку</button>
+        </div>
+
+        <div id="orderStatus" class="order-status hidden">
+            <h3>Статус заявки</h3>
+            <p id="orderIdText"></p>
+            <p id="paymentAddress"></p>
+            <p id="statusText">⏳ Ожидает оплату</p>
+        </div>
+    </div>
+
+    <script>
+        let currentRate = { USDT: 46, TON: 80 };
+
+        function goToProfile() {
+            const user = localStorage.getItem('swapUser');
+            if (user) {
+                window.location.href = '/frontend/profile.html';
+            } else {
+                window.location.href = '/frontend/index.html';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('swapUser');
+            window.location.href = '/frontend/index.html';
+        }
+
+        async function loadRates() {
+            try {
+                const response = await fetch('/api/rates');
+                const data = await response.json();
+                currentRate = data;
+                document.getElementById('usdtRate').textContent = data.USDT.toFixed(2);
+                document.getElementById('tonRate').textContent = data.TON.toFixed(2);
+            } catch (error) {
+                console.log('Стандартный курс');
+            }
+        }
+
+        loadRates();
+
+        document.getElementById('direction').addEventListener('change', function(e) {
+            const sendCurrency = document.getElementById('sendCurrency');
+            sendCurrency.textContent = e.target.value === 'USDT_TO_UAH' ? 'USDT' : 'TON';
+            calculateReceive();
+        });
+
+        document.getElementById('sendAmount').addEventListener('input', calculateReceive);
+
+        function calculateReceive() {
+            const direction = document.getElementById('direction').value;
+            const sendAmount = parseFloat(document.getElementById('sendAmount').value) || 0;
+            const receiveAmount = sendAmount * (direction === 'USDT_TO_UAH' ? currentRate.USDT : currentRate.TON);
+            document.getElementById('receiveAmount').value = receiveAmount.toFixed(2);
+        }
+
+        document.getElementById('createOrderBtn').addEventListener('click', async function() {
+            const direction = document.getElementById('direction').value;
+            const sendAmount = parseFloat(document.getElementById('sendAmount').value);
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+
+            if (!cardNumber || cardNumber.length < 16) {
+                alert('Введите корректный номер карты');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ direction, amount: sendAmount, cardNumber })
+                });
+
+                const data = await response.json();
+
+                document.getElementById('orderStatus').classList.remove('hidden');
+                document.getElementById('orderIdText').innerHTML = `<strong>Номер заявки:</strong> ${data.orderId}`;
+                document.getElementById('paymentAddress').innerHTML = `<strong>Адрес для оплаты:</strong> ${data.paymentAddress}`;
+
+                checkOrderStatus(data.orderId);
+            } catch (error) {
+                alert('Ошибка создания заявки');
+            }
+        });
+
+        async function checkOrderStatus(orderId) {
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/order/${orderId}`);
+                    const data = await response.json();
+                    const statusText = document.getElementById('statusText');
+
+                    if (data.status === 'received') {
+                        statusText.innerHTML = '🔵 Перевод получен, ожидайте подтверждения';
+                    } else if (data.status === 'confirmed') {
+                        statusText.innerHTML = '✅ Подтверждено! Деньги отправлены на карту';
+                        clearInterval(interval);
+                    }
+                } catch (error) {
+                    console.log('Ошибка проверки статуса');
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
