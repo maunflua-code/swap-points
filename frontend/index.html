@@ -175,14 +175,15 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
             text-align: center;
         }
 
         .stat-number {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
+            line-height: 1;
         }
 
         .stat-number.success {
@@ -195,7 +196,7 @@
 
         .stat-label {
             color: #888;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-top: 5px;
         }
 
@@ -231,6 +232,88 @@
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
+        }
+
+        /* Стрічка обмінів */
+        .exchange-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #0f0f0f;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Відгуки */
+        .reviews-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 15px;
+        }
+
+        .reviews-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stars {
+            color: gold;
+            font-size: 1.2rem;
+        }
+
+        .reviews-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #333 #0f0f0f;
+        }
+
+        .reviews-scroll::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .reviews-scroll::-webkit-scrollbar-track {
+            background: #0f0f0f;
+            border-radius: 5px;
+        }
+
+        .reviews-scroll::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 5px;
+        }
+
+        .review-card {
+            min-width: 250px;
+            background: #0f0f0f;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .review-stars {
+            color: gold;
+            margin-bottom: 8px;
+        }
+
+        .review-text {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .review-author {
+            color: #888;
+            font-size: 0.8rem;
         }
 
         /* Модальне вікно */
@@ -325,6 +408,10 @@
             h1 {
                 font-size: 3rem;
             }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
@@ -383,6 +470,20 @@
                         <div class="stat-number zero">0</div>
                         <div class="stat-label">скарг</div>
                     </div>
+                    <div>
+                        <div class="stat-number" id="totalUsers">528</div>
+                        <div class="stat-label">користувачів</div>
+                    </div>
+                </div>
+                
+                <!-- Стрічка останніх обмінів -->
+                <div style="margin-top: 25px;">
+                    <div style="color: #888; font-size: 0.9rem; margin-bottom: 15px; text-align: left;">
+                        ⚡ Останні обміни:
+                    </div>
+                    <div id="recentExchanges" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Тут будуть додаватись обміни через JavaScript -->
+                    </div>
                 </div>
                 
                 <div class="trust-badge">
@@ -392,6 +493,36 @@
                 <div class="online-indicator">
                     <span class="dot"></span>
                     <span id="onlineNow">128</span> людей зараз на сайті
+                </div>
+            </div>
+
+            <!-- Блок відгуків -->
+            <div class="reviews-section">
+                <div class="reviews-header">
+                    <div class="stars">★★★★★</div>
+                    <span style="color: #888;">4.9 (328 відгуків)</span>
+                </div>
+                <div class="reviews-scroll" id="reviewsList">
+                    <div class="review-card">
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-text">"Все швидко і чесно, вже не перший раз міняю"</div>
+                        <div class="review-author">— Олександр</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-text">"Найкращий курс в місті, раджу!"</div>
+                        <div class="review-author">— Михайло</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-text">"Зручно, швидко, без проблем"</div>
+                        <div class="review-author">— Андрій</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-text">"Користуюсь постійно, все топ"</div>
+                        <div class="review-author">— Віктор</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -465,19 +596,34 @@
                 const response = await fetch('/api/stats');
                 const data = await response.json();
                 
+                // Оновлюємо лічильники
                 const exchangeEl = document.getElementById('successfulExchanges');
-                if (exchangeEl) {
-                    exchangeEl.textContent = data.totalExchanges.toLocaleString();
+                if (exchangeEl) exchangeEl.textContent = data.totalExchanges.toLocaleString();
+                
+                const usersEl = document.getElementById('totalUsers');
+                if (usersEl) usersEl.textContent = data.totalUsers.toLocaleString();
+                
+                const onlineEl = document.getElementById('onlineNow');
+                if (onlineEl) onlineEl.textContent = data.online;
+                
+                // Оновлюємо стрічку останніх обмінів
+                const recentEl = document.getElementById('recentExchanges');
+                if (recentEl && data.recentExchanges && data.recentExchanges.length > 0) {
+                    recentEl.innerHTML = data.recentExchanges.map(ex => `
+                        <div class="exchange-item">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #4caf50;">●</span>
+                                <span>${ex.amount} ${ex.currency}</span>
+                            </div>
+                            <div style="color: #888;">
+                                ≈ ${ex.uah.toLocaleString()} UAH
+                            </div>
+                        </div>
+                    `).join('');
                 }
                 
-                // Онлайн користувачі
-                const onlineEl = document.getElementById('onlineNow');
-                if (onlineEl) {
-                    const online = Math.floor(Math.random() * 50) + 100;
-                    onlineEl.textContent = online;
-                }
             } catch (error) {
-                console.log('Використовуються стандартні значення');
+                console.log('Помилка оновлення статистики:', error);
             }
         }
 
@@ -487,9 +633,12 @@
             window.location.href = '/frontend/profile.html';
         }
 
+        // Завантажуємо курси та статистику
         loadRates();
         updateSocialProof();
-        setInterval(updateSocialProof, 30000); // Оновлюємо кожні 30 секунд
+        
+        // Оновлюємо кожні 30 секунд
+        setInterval(updateSocialProof, 30000);
     </script>
 </body>
 </html>
