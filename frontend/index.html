@@ -166,7 +166,6 @@
             color: #fff;
         }
 
-        /* Соціальний доказ */
         .social-proof {
             background: #1a1a1a;
             border-radius: 20px;
@@ -234,7 +233,6 @@
             100% { opacity: 1; }
         }
 
-        /* Стрічка обмінів */
         .exchange-item {
             display: flex;
             justify-content: space-between;
@@ -250,7 +248,6 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        /* Відгуки */
         .reviews-section {
             margin-top: 20px;
             padding: 20px;
@@ -275,8 +272,6 @@
             gap: 10px;
             overflow-x: auto;
             padding-bottom: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: #333 #0f0f0f;
         }
 
         .reviews-scroll::-webkit-scrollbar {
@@ -316,7 +311,6 @@
             font-size: 0.8rem;
         }
 
-        /* Модальне вікно */
         .modal {
             display: none;
             position: fixed;
@@ -384,7 +378,6 @@
             background: #0f0f0f;
             color: #fff;
             border: 1px solid #333;
-            margin-top: 10px;
         }
 
         .modal-link {
@@ -397,6 +390,29 @@
         .modal-link a {
             color: #fff;
             text-decoration: none;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #888;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
         }
 
         @media (max-width: 768px) {
@@ -459,7 +475,6 @@
                 </div>
             </div>
 
-            <!-- Соціальний доказ -->
             <div class="social-proof">
                 <div class="stats-grid">
                     <div>
@@ -476,14 +491,11 @@
                     </div>
                 </div>
                 
-                <!-- Стрічка останніх обмінів -->
                 <div style="margin-top: 25px;">
                     <div style="color: #888; font-size: 0.9rem; margin-bottom: 15px; text-align: left;">
                         ⚡ Останні обміни:
                     </div>
-                    <div id="recentExchanges" style="display: flex; flex-direction: column; gap: 10px;">
-                        <!-- Тут будуть додаватись обміни через JavaScript -->
-                    </div>
+                    <div id="recentExchanges" style="display: flex; flex-direction: column; gap: 10px;"></div>
                 </div>
                 
                 <div class="trust-badge">
@@ -496,7 +508,6 @@
                 </div>
             </div>
 
-            <!-- Блок відгуків -->
             <div class="reviews-section">
                 <div class="reviews-header">
                     <div class="stars">★★★★★</div>
@@ -518,23 +529,26 @@
                         <div class="review-text">"Зручно, швидко, без проблем"</div>
                         <div class="review-author">— Андрій</div>
                     </div>
-                    <div class="review-card">
-                        <div class="review-stars">★★★★★</div>
-                        <div class="review-text">"Користуюсь постійно, все топ"</div>
-                        <div class="review-author">— Віктор</div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Модальне вікно входу -->
+    <!-- Модальне вікно входу/реєстрації -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <h2 class="modal-title">Вхід</h2>
+            <h2 class="modal-title" id="modalTitle">Вхід</h2>
+            
+            <div class="tab-buttons">
+                <button class="tab-btn active" id="loginTab" onclick="showLoginForm()">Вхід</button>
+                <button class="tab-btn" id="registerTab" onclick="showRegisterForm()">Реєстрація</button>
+            </div>
+            
             <input type="text" class="modal-input" id="phoneNumber" placeholder="Номер телефону" value="+380">
-            <button class="modal-btn" onclick="login()">Увійти</button>
-            <button class="modal-btn secondary" onclick="quickExchange()">Продовжити без реєстрації</button>
+            <input type="password" class="modal-input" id="password" placeholder="Пароль">
+            
+            <button class="modal-btn" id="actionBtn" onclick="login()">Увійти</button>
+            
             <div class="modal-link">
                 <a href="#" onclick="hideLoginModal()">Закрити</a>
             </div>
@@ -543,38 +557,68 @@
 
     <script>
         let currentRate = { USDT: 46, TON: 80 };
+        let isRegisterMode = false;
 
         function showLoginModal() {
             document.getElementById('loginModal').classList.add('active');
+            showLoginForm();
         }
 
         function hideLoginModal() {
             document.getElementById('loginModal').classList.remove('active');
         }
 
-        function quickExchange() {
-            window.location.href = '/frontend/exchange.html';
+        function showLoginForm() {
+            isRegisterMode = false;
+            document.getElementById('modalTitle').textContent = 'Вхід';
+            document.getElementById('actionBtn').textContent = 'Увійти';
+            document.getElementById('loginTab').classList.add('active');
+            document.getElementById('registerTab').classList.remove('active');
+        }
+
+        function showRegisterForm() {
+            isRegisterMode = true;
+            document.getElementById('modalTitle').textContent = 'Реєстрація';
+            document.getElementById('actionBtn').textContent = 'Зареєструватися';
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('registerTab').classList.add('active');
         }
 
         async function login() {
             const phone = document.getElementById('phoneNumber').value;
+            const password = document.getElementById('password').value;
+            
             if (!phone || phone.length < 10) {
                 alert('Введіть коректний номер телефону');
                 return;
             }
-
+            
+            if (!password || password.length < 4) {
+                alert('Пароль має бути не менше 4 символів');
+                return;
+            }
+            
             try {
                 const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone })
+                    body: JSON.stringify({ 
+                        phone, 
+                        password,
+                        isRegister: isRegisterMode 
+                    })
                 });
                 
-                const user = await response.json();
-                localStorage.setItem('swapUser', JSON.stringify(user));
-                window.location.href = '/frontend/profile.html';
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('swapUser', JSON.stringify(data));
+                    window.location.href = '/frontend/profile.html';
+                } else {
+                    alert(data.error || 'Помилка');
+                }
             } catch (error) {
-                alert('Помилка входу');
+                alert('Помилка з\'єднання');
             }
         }
 
@@ -590,13 +634,11 @@
             }
         }
 
-        // Функція для оновлення соціального доказу
         async function updateSocialProof() {
             try {
                 const response = await fetch('/api/stats');
                 const data = await response.json();
                 
-                // Оновлюємо лічильники
                 const exchangeEl = document.getElementById('successfulExchanges');
                 if (exchangeEl) exchangeEl.textContent = data.totalExchanges.toLocaleString();
                 
@@ -606,7 +648,6 @@
                 const onlineEl = document.getElementById('onlineNow');
                 if (onlineEl) onlineEl.textContent = data.online;
                 
-                // Оновлюємо стрічку останніх обмінів
                 const recentEl = document.getElementById('recentExchanges');
                 if (recentEl && data.recentExchanges && data.recentExchanges.length > 0) {
                     recentEl.innerHTML = data.recentExchanges.map(ex => `
@@ -627,17 +668,13 @@
             }
         }
 
-        // Перевіряємо чи користувач вже залогінений
         const savedUser = localStorage.getItem('swapUser');
         if (savedUser) {
             window.location.href = '/frontend/profile.html';
         }
 
-        // Завантажуємо курси та статистику
         loadRates();
         updateSocialProof();
-        
-        // Оновлюємо кожні 30 секунд
         setInterval(updateSocialProof, 30000);
     </script>
 </body>

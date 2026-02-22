@@ -65,7 +65,6 @@
             padding: 0 20px;
         }
 
-        /* Баланс */
         .balance-card {
             background: #1a1a1a;
             border-radius: 20px;
@@ -94,7 +93,6 @@
             font-size: 1.2rem;
         }
 
-        /* Статистика */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -120,7 +118,6 @@
             font-weight: 600;
         }
 
-        /* Кнопки */
         .actions {
             display: flex;
             gap: 15px;
@@ -163,7 +160,6 @@
             opacity: 0.9;
         }
 
-        /* Історія */
         .history-section {
             background: #1a1a1a;
             border: 1px solid #222;
@@ -208,7 +204,6 @@
             color: #ff9800;
         }
 
-        /* Модальні вікна */
         .modal {
             display: none;
             position: fixed;
@@ -281,29 +276,27 @@
         <div class="header-content">
             <a href="/frontend/index.html" class="logo">SWAP POINTS</a>
             <div class="nav">
-                <a href="/frontend/exchange.html">Обмен</a>
-                <a class="active">Кабинет</a>
-                <a onclick="logout()">Выйти</a>
+                <a href="/frontend/exchange.html">Обмін</a>
+                <a class="active">Кабінет</a>
+                <a onclick="logout()">Вийти</a>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- Баланс -->
         <div class="balance-card">
             <div class="balance-label">Ваш баланс</div>
             <div class="balance-amount" id="balanceUSDT">0 USDT</div>
             <div class="balance-usd" id="balanceUAH">0 UAH</div>
         </div>
 
-        <!-- Статистика -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label">Всего обменов</div>
+                <div class="stat-label">Всього обмінів</div>
                 <div class="stat-value" id="totalExchanges">0</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Обменяно UAH</div>
+                <div class="stat-label">Обмінено UAH</div>
                 <div class="stat-value" id="totalExchangedUAH">0</div>
             </div>
             <div class="stat-card">
@@ -312,58 +305,54 @@
             </div>
         </div>
 
-        <!-- Кнопки дій -->
         <div class="actions">
             <button class="btn btn-primary" onclick="showDepositModal()">
-                <span>+</span> Пополнить баланс
+                <span>+</span> Поповнити баланс
             </button>
             <button class="btn" onclick="showWithdrawModal()">
-                <span>💳</span> Вывести на карту
+                <span>💳</span> Вивести на карту
             </button>
             <button class="btn" onclick="window.location.href='/frontend/exchange.html'">
-                <span>🔄</span> Быстрый обмен
+                <span>🔄</span> Швидкий обмін
             </button>
         </div>
 
-        <!-- Історія -->
         <div class="history-section">
-            <div class="history-title">История операций</div>
+            <div class="history-title">Історія операцій</div>
             <div class="history-list" id="historyList">
                 <div class="history-item header">
                     <div>Дата</div>
                     <div>Тип</div>
-                    <div>Сумма</div>
+                    <div>Сума</div>
                     <div>Статус</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Модальне вікно поповнення -->
     <div class="modal" id="depositModal">
         <div class="modal-content">
-            <div class="modal-title">Пополнение баланса</div>
-            <p style="color: #888; margin-bottom: 20px;">Отправьте USDT на этот адрес:</p>
+            <div class="modal-title">Поповнення балансу</div>
+            <p style="color: #888; margin-bottom: 20px;">Відправте USDT на цю адресу:</p>
             <div class="address-box" id="depositAddress">UQCS3J9NntTQTrhpmYcCk45tO3iH2H-6vq5fqqrqKCGhT8bG</div>
-            <input type="number" id="depositAmount" class="modal-input" placeholder="Сумма в USDT">
-            <p style="color: #888; margin-bottom: 20px;">После отправки нажмите "Я отправил"</p>
+            <input type="number" id="depositAmount" class="modal-input" placeholder="Сума в USDT">
+            <p style="color: #888; margin-bottom: 20px;">Після відправки натисніть "Я відправив"</p>
             <div class="modal-buttons">
-                <button class="btn" onclick="hideDepositModal()">Отмена</button>
-                <button class="btn btn-primary" onclick="confirmDeposit()">Я отправил</button>
+                <button class="btn" onclick="hideDepositModal()">Скасувати</button>
+                <button class="btn btn-primary" onclick="confirmDeposit()">Я відправив</button>
             </div>
         </div>
     </div>
 
-    <!-- Модальне вікно виведення -->
     <div class="modal" id="withdrawModal">
         <div class="modal-content">
-            <div class="modal-title">Вывод на карту</div>
-            <input type="number" id="withdrawAmount" class="modal-input" placeholder="Сумма в USDT">
-            <input type="text" id="withdrawCard" class="modal-input" placeholder="Номер карты">
-            <p style="color: #888; margin-bottom: 20px;">Вы получите: <span id="withdrawUAH">0 UAH</span></p>
+            <div class="modal-title">Вивести на карту</div>
+            <input type="number" id="withdrawAmount" class="modal-input" placeholder="Сума в USDT">
+            <input type="text" id="withdrawCard" class="modal-input" placeholder="Номер карти">
+            <p style="color: #888; margin-bottom: 20px;">Ви отримаєте: <span id="withdrawUAH">0 UAH</span></p>
             <div class="modal-buttons">
-                <button class="btn" onclick="hideWithdrawModal()">Отмена</button>
-                <button class="btn btn-primary" onclick="withdraw()">Вывести</button>
+                <button class="btn" onclick="hideWithdrawModal()">Скасувати</button>
+                <button class="btn btn-primary" onclick="withdraw()">Вивести</button>
             </div>
         </div>
     </div>
@@ -416,17 +405,17 @@
             const list = document.getElementById('historyList');
             
             if (history.length === 0) {
-                list.innerHTML = '<div class="history-item">История пуста</div>';
+                list.innerHTML = '<div class="history-item">Історія порожня</div>';
                 return;
             }
 
-            list.innerHTML = '<div class="history-item header"><div>Дата</div><div>Тип</div><div>Сумма</div><div>Статус</div></div>' +
+            list.innerHTML = '<div class="history-item header"><div>Дата</div><div>Тип</div><div>Сума</div><div>Статус</div></div>' +
                 history.map(item => `
                     <div class="history-item">
                         <div>${new Date(item.date).toLocaleString()}</div>
-                        <div>${item.type === 'deposit' ? 'Пополнение' : 'Вывод'}</div>
+                        <div>${item.type === 'deposit' ? 'Поповнення' : 'Виведення'}</div>
                         <div>${item.amount} ${item.currency}</div>
-                        <div class="status-${item.status}">${item.status === 'pending' ? '⏳ В обработке' : '✅ Подтверждено'}</div>
+                        <div class="status-${item.status}">${item.status === 'pending' ? '⏳ В обробці' : '✅ Підтверджено'}</div>
                     </div>
                 `).join('');
         }
@@ -451,7 +440,7 @@
             const amount = parseFloat(document.getElementById('depositAmount').value);
             
             if (!amount || amount <= 0) {
-                alert('Введите сумму');
+                alert('Введіть суму');
                 return;
             }
 
@@ -466,10 +455,10 @@
                 });
 
                 const result = await response.json();
-                alert('✅ Заявка на пополнение создана! После подтверждения администратором баланс будет зачислен.');
+                alert('✅ Заявку на поповнення створено!');
                 hideDepositModal();
             } catch (error) {
-                alert('❌ Ошибка создания заявки');
+                alert('❌ Помилка створення заявки');
             }
         }
 
@@ -484,12 +473,12 @@
             const card = document.getElementById('withdrawCard').value;
 
             if (!amount || amount <= 0) {
-                alert('Введите сумму');
+                alert('Введіть суму');
                 return;
             }
 
             if (!card || card.length < 16) {
-                alert('Введите корректный номер карты');
+                alert('Введіть коректний номер карти');
                 return;
             }
 
@@ -506,14 +495,14 @@
 
                 const result = await response.json();
                 if (result.success) {
-                    alert('✅ Заявка на вывод создана!');
+                    alert('✅ Заявку на виведення створено!');
                     hideWithdrawModal();
                     loadUserData();
                 } else {
-                    alert(result.error || '❌ Ошибка');
+                    alert(result.error || '❌ Помилка');
                 }
             } catch (error) {
-                alert('❌ Ошибка создания заявки');
+                alert('❌ Помилка створення заявки');
             }
         }
 

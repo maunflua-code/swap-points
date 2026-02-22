@@ -34,7 +34,6 @@ app.get('/api/rates', async (req, res) => {
         }
         res.json({ USDT: rate.USDT, TON: rate.TON });
     } catch (error) {
-        // Якщо MongoDB не працює, використовуємо дані в пам'яті
         res.json(currentRate);
     }
 });
@@ -52,29 +51,54 @@ app.post('/api/rates', async (req, res) => {
         rate.updatedAt = new Date();
         await rate.save();
         
-        // Оновлюємо також в пам'яті
         currentRate = { USDT: rate.USDT, TON: rate.TON };
         
         res.json({ success: true, rates: { USDT: rate.USDT, TON: rate.TON } });
     } catch (error) {
-        // Якщо MongoDB не працює, оновлюємо в пам'яті
         if (USDT) currentRate.USDT = USDT;
         if (TON) currentRate.TON = TON;
         res.json({ success: true, rates: currentRate });
     }
 });
 
-// Вхід/реєстрація
+// Вхід/реєстрація з паролем
 app.post('/api/login', async (req, res) => {
     try {
-        const { phone } = req.body;
+        const { phone, password, isRegister } = req.body;
         
+        if (!phone || !password) {
+            return res.status(400).json({ error: 'Телефон і пароль обов\'язкові' });
+        }
+        
+        // Шукаємо користувача
         let user = await User.findOne({ phone });
         
-        if (!user) {
-            user = new User({ phone });
+        if (isRegister) {
+            // РЕЄСТРАЦІЯ
+            if (user) {
+                return res.status(400).json({ error: 'Користувач з таким номером вже існує' });
+            }
+            
+            // Створюємо нового користувача з паролем
+            user = new User({ 
+                phone, 
+                password,
+                balanceUSDT: 0,
+                balanceUAH: 0
+            });
             await user.save();
-            console.log('✅ Нового користувача створено:', user.id);
+            console.log('✅ Нового користувача створено:', phone);
+            
+        } else {
+            // ВХІД
+            if (!user) {
+                return res.status(404).json({ error: 'Користувача не знайдено' });
+            }
+            
+            // Перевіряємо пароль
+            if (user.password !== password) {
+                return res.status(401).json({ error: 'Невірний пароль' });
+            }
         }
         
         res.json({
@@ -83,30 +107,10 @@ app.post('/api/login', async (req, res) => {
             balanceUSDT: user.balanceUSDT,
             balanceUAH: user.balanceUAH
         });
+        
     } catch (error) {
-        console.log('Помилка MongoDB, використовуємо пам\'ять');
-        
-        // Fallback на пам'ять
-        let user = users.find(u => u.phone === phone);
-        if (!user) {
-            user = {
-                id: 'user_' + Date.now(),
-                phone,
-                balanceUSDT: 0,
-                balanceUAH: 0,
-                totalExchanges: 0,
-                totalExchangedUAH: 0,
-                createdAt: new Date()
-            };
-            users.push(user);
-        }
-        
-        res.json({
-            id: user.id,
-            phone: user.phone,
-            balanceUSDT: user.balanceUSDT,
-            balanceUAH: user.balanceUAH
-        });
+        console.log('Помилка:', error);
+        res.status(500).json({ error: 'Помилка сервера' });
     }
 });
 
@@ -126,8 +130,6 @@ app.get('/api/user/:userId', async (req, res) => {
             totalExchangedUAH: user.totalExchangedUAH
         });
     } catch (error) {
-        console.log('Помилка MongoDB, використовуємо пам\'ять');
-        
         const user = users.find(u => u.id === req.params.userId);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -148,8 +150,6 @@ app.get('/api/user/:userId/history', async (req, res) => {
         const userTransactions = await Transaction.find({ userId: req.params.userId }).sort({ date: -1 });
         res.json(userTransactions);
     } catch (error) {
-        console.log('Помилка MongoDB, використовуємо пам\'ять');
-        
         const userTransactions = transactions.filter(t => t.userId === req.params.userId);
         res.json(userTransactions);
     }
@@ -179,8 +179,6 @@ app.post('/api/deposit/request', async (req, res) => {
         
         res.json({ success: true, message: 'Заявку створено' });
     } catch (error) {
-        console.log('Помилка MongoDB, використовуємо пам\'ять');
-        
         const transaction = {
             id: 'dep_' + Date.now(),
             userId,
@@ -265,8 +263,6 @@ app.post('/api/withdraw', async (req, res) => {
         
         res.json({ success: true });
     } catch (error) {
-        console.log('Помилка MongoDB, використовуємо пам\'ять');
-        
         const user = users.find(u => u.id === userId);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -326,8 +322,6 @@ app.post('/api/create-order', async (req, res) => {
         
         res.json({ orderId, paymentAddress, amount, amountUAH });
     } catch (error) {
-        console.log('Помилка MongoDB, використовуємо пам\'ять');
-        
         const orderId = 'SWAP-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
         const paymentAddress = 'UQCS3J9NntTQTrhpmYcCk45tO3iH2H-6vq5fqqrqKCGhT8bG';
         const rateValue = direction === 'USDT_TO_UAH' ? 46 : 80;
@@ -387,18 +381,16 @@ app.get('/api/order/:orderId', async (req, res) => {
 // Отримати статистику для соціального доказу
 app.get('/api/stats', async (req, res) => {
     try {
-        // Реальні дані з бази
         const totalExchanges = await Order.countDocuments({ status: 'confirmed' });
         const totalUsers = await User.countDocuments();
         
-        // Останні 5 обмінів
         const recentExchanges = await Order.find({ status: 'confirmed' })
             .sort({ createdAt: -1 })
             .limit(5)
             .select('amount amountUAH direction createdAt');
         
         res.json({
-            totalExchanges: totalExchanges + 1243, // + початкові дані
+            totalExchanges: totalExchanges + 1243,
             totalUsers,
             online: Math.floor(Math.random() * 50) + 100,
             recentExchanges: recentExchanges.map(ex => ({
@@ -409,9 +401,6 @@ app.get('/api/stats', async (req, res) => {
             }))
         });
     } catch (error) {
-        console.log('Помилка статистики, використовуємо тестові дані');
-        
-        // Тестові дані якщо база порожня
         res.json({
             totalExchanges: 1243,
             totalUsers: 528,
@@ -419,9 +408,7 @@ app.get('/api/stats', async (req, res) => {
             recentExchanges: [
                 { amount: 150, currency: 'USDT', uah: 6900, time: new Date() },
                 { amount: 45, currency: 'TON', uah: 3600, time: new Date() },
-                { amount: 280, currency: 'USDT', uah: 12880, time: new Date() },
-                { amount: 100, currency: 'USDT', uah: 4600, time: new Date() },
-                { amount: 30, currency: 'TON', uah: 2400, time: new Date() }
+                { amount: 280, currency: 'USDT', uah: 12880, time: new Date() }
             ]
         });
     }
@@ -559,7 +546,7 @@ app.get('/', async (req, res) => {
     } catch (error) {
         res.send(`
             <h1>Swap Points Server</h1>
-            <p>Сервер працює в режимі пам'яті (без MongoDB)</p>
+            <p>Сервер працює в режимі пам'яті</p>
             <ul>
                 <li><a href="/frontend/index.html">Головна сторінка</a></li>
                 <li><a href="/frontend/exchange.html">Обмінник</a></li>

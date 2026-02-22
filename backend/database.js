@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 
-// Підключення до MongoDB
+// Підключення до MongoDB Atlas
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/swap-points';
 
 mongoose.connect(MONGODB_URI)
     .then(() => console.log('✅ MongoDB підключено!'))
     .catch(err => console.error('❌ Помилка MongoDB:', err));
 
-// Схема користувача
+// Схема користувача (з паролем)
 const userSchema = new mongoose.Schema({
     phone: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
     balanceUSDT: { type: Number, default: 0 },
     balanceUAH: { type: Number, default: 0 },
     totalExchanges: { type: Number, default: 0 },
