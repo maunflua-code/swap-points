@@ -5,23 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Swap Points | Обмін криптовалют</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0f0f0f;
             color: #fff;
         }
-
         .header {
             border-bottom: 1px solid #222;
             padding: 15px 0;
         }
-
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -30,35 +23,24 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             font-size: 1.5rem;
             font-weight: 600;
             color: #fff;
             text-decoration: none;
         }
-
         .nav {
             display: flex;
             gap: 30px;
         }
-
         .nav a {
             color: #888;
             text-decoration: none;
             font-size: 0.95rem;
-            transition: color 0.2s;
             cursor: pointer;
         }
-
-        .nav a:hover {
-            color: #fff;
-        }
-
-        .nav a.active {
-            color: #fff;
-        }
-
+        .nav a:hover { color: #fff; }
+        .nav a.active { color: #fff; }
         .main {
             max-width: 1200px;
             margin: 60px auto;
@@ -67,66 +49,41 @@
             grid-template-columns: 1fr 1fr;
             gap: 60px;
         }
-
-        .left-col {
-            padding-right: 40px;
-        }
-
+        .left-col { padding-right: 40px; }
         .badge {
             color: #888;
             font-size: 0.9rem;
             margin-bottom: 20px;
-            letter-spacing: 0.5px;
         }
-
         h1 {
             font-size: 4rem;
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 20px;
         }
-
-        h1 span {
-            color: #555;
-        }
-
+        h1 span { color: #555; }
         .description {
             color: #888;
             font-size: 1rem;
             max-width: 450px;
             margin-bottom: 40px;
         }
-
         .features {
             display: flex;
             gap: 30px;
-            margin-top: 40px;
             flex-wrap: wrap;
         }
-
         .feature-item {
             color: #888;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: color 0.2s;
         }
-
-        .feature-item:hover {
-            color: #fff;
-        }
-
-        .right-col {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
+        .feature-item:hover { color: #fff; }
         .rate-card {
             background: #1a1a1a;
             border-radius: 20px;
             padding: 30px;
         }
-
         .rate-item {
             display: flex;
             justify-content: space-between;
@@ -134,71 +91,42 @@
             padding: 20px 0;
             border-bottom: 1px solid #333;
         }
-
-        .rate-item:last-child {
-            border-bottom: none;
-        }
-
-        .rate-label {
-            font-size: 1rem;
-            color: #888;
-        }
-
-        .rate-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
+        .rate-item:last-child { border-bottom: none; }
+        .rate-label { color: #888; }
+        .rate-value { font-size: 1.5rem; font-weight: 600; }
         .rate-note {
             color: #888;
             font-size: 0.85rem;
             margin-top: 20px;
             text-align: right;
         }
-
         .rate-note a {
             color: #888;
             text-decoration: none;
             border-bottom: 1px solid #333;
         }
-
-        .rate-note a:hover {
-            color: #fff;
-        }
-
         .social-proof {
             background: #1a1a1a;
             border-radius: 20px;
             padding: 30px;
         }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             text-align: center;
         }
-
         .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
-            line-height: 1;
         }
-
-        .stat-number.success {
-            color: #4caf50;
-        }
-
-        .stat-number.zero {
-            color: #ff4444;
-        }
-
+        .stat-number.success { color: #4caf50; }
+        .stat-number.zero { color: #ff4444; }
         .stat-label {
             color: #888;
             font-size: 0.8rem;
             margin-top: 5px;
         }
-
         .trust-badge {
             margin-top: 20px;
             padding: 15px;
@@ -206,9 +134,7 @@
             border-radius: 10px;
             text-align: center;
             color: #888;
-            font-size: 0.9rem;
         }
-
         .online-indicator {
             display: flex;
             align-items: center;
@@ -216,9 +142,7 @@
             gap: 10px;
             margin-top: 15px;
             color: #888;
-            font-size: 0.9rem;
         }
-
         .dot {
             width: 8px;
             height: 8px;
@@ -226,91 +150,11 @@
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
         }
-
-        .exchange-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: #0f0f0f;
-            border-radius: 8px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .reviews-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: #1a1a1a;
-            border-radius: 15px;
-        }
-
-        .reviews-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .stars {
-            color: gold;
-            font-size: 1.2rem;
-        }
-
-        .reviews-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-
-        .reviews-scroll::-webkit-scrollbar {
-            height: 5px;
-        }
-
-        .reviews-scroll::-webkit-scrollbar-track {
-            background: #0f0f0f;
-            border-radius: 5px;
-        }
-
-        .reviews-scroll::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 5px;
-        }
-
-        .review-card {
-            min-width: 250px;
-            background: #0f0f0f;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .review-stars {
-            color: gold;
-            margin-bottom: 8px;
-        }
-
-        .review-text {
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .review-author {
-            color: #888;
-            font-size: 0.8rem;
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -323,11 +167,7 @@
             align-items: center;
             z-index: 1000;
         }
-
-        .modal.active {
-            display: flex;
-        }
-
+        .modal.active { display: flex; }
         .modal-content {
             background: #1a1a1a;
             max-width: 400px;
@@ -335,12 +175,10 @@
             padding: 40px;
             border-radius: 20px;
         }
-
         .modal-title {
             font-size: 2rem;
             margin-bottom: 30px;
         }
-
         .modal-input {
             width: 100%;
             padding: 15px;
@@ -351,12 +189,10 @@
             font-size: 1rem;
             margin-bottom: 20px;
         }
-
         .modal-input:focus {
             outline: none;
             border-color: #555;
         }
-
         .modal-btn {
             width: 100%;
             padding: 15px;
@@ -367,37 +203,23 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
-
-        .modal-btn:hover {
-            opacity: 0.9;
-        }
-
         .modal-btn.secondary {
             background: #0f0f0f;
             color: #fff;
             border: 1px solid #333;
         }
-
         .modal-link {
             text-align: center;
             margin-top: 20px;
             color: #888;
-            font-size: 0.9rem;
         }
-
-        .modal-link a {
-            color: #fff;
-            text-decoration: none;
-        }
-
+        .modal-link a { color: #fff; text-decoration: none; }
         .tab-buttons {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-
         .tab-btn {
             flex: 1;
             padding: 12px;
@@ -406,28 +228,57 @@
             border-radius: 10px;
             color: #888;
             cursor: pointer;
-            font-size: 1rem;
         }
-
         .tab-btn.active {
             background: #fff;
             color: #000;
-            border-color: #fff;
         }
-
+        .forgot-link {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        .forgot-link a {
+            color: #888;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+        .forgot-link a:hover {
+            color: #fff;
+        }
+        
+        #loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-content {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top-color: #4caf50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
         @media (max-width: 768px) {
-            .main {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            h1 {
-                font-size: 3rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .main { grid-template-columns: 1fr; gap: 30px; }
+            h1 { font-size: 3rem; }
         }
     </style>
 </head>
@@ -436,7 +287,7 @@
         <div class="header-content">
             <a href="#" class="logo">SWAP POINTS</a>
             <div class="nav">
-                <a href="#" class="active">Курси валют</a>
+                <a href="#" class="active">Курси</a>
                 <a href="#" onclick="showLoginModal()">Вхід</a>
                 <a href="#" onclick="showLoginModal()">Реєстрація</a>
             </div>
@@ -448,12 +299,12 @@
             <div class="badge">НАШ КРИПТООБМІННИК</div>
             <h1>SWAP POINTS<br><span>КРИПТОВАЛЮТ</span></h1>
             <p class="description">
-                Просто, автоматично і без прихованих комісій. 
-                Простий спосіб обміну криптовалюти в режимі онлайн.
+                Просто, автоматично і без комісій. 
+                Швидкий обмін криптовалюти онлайн.
             </p>
             <div class="features">
                 <div class="feature-item">FAQ</div>
-                <div class="feature-item">Офлайн обмін</div>
+                <div class="feature-item">Офлайн</div>
                 <div class="feature-item">Новини</div>
                 <div class="feature-item">Контакти</div>
             </div>
@@ -470,8 +321,8 @@
                     <span class="rate-value" id="tonRate">80.00</span>
                 </div>
                 <div class="rate-note">
-                    Всі комісії вже враховані. 
-                    <a href="#" onclick="showLoginModal()">Дізнатись на сайті</a>
+                    Всі комісії враховані 
+                    <a href="#" onclick="showLoginModal()">Детальніше</a>
                 </div>
             </div>
 
@@ -479,7 +330,7 @@
                 <div class="stats-grid">
                     <div>
                         <div class="stat-number success" id="successfulExchanges">1 243</div>
-                        <div class="stat-label">успішних обмінів</div>
+                        <div class="stat-label">обмінів</div>
                     </div>
                     <div>
                         <div class="stat-number zero">0</div>
@@ -493,48 +344,26 @@
                 
                 <div style="margin-top: 25px;">
                     <div style="color: #888; font-size: 0.9rem; margin-bottom: 15px; text-align: left;">
-                        ⚡ Останні обміни:
+                        ⚡ Останні угоди:
                     </div>
-                    <div id="recentExchanges" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                    <div id="recentTransactions" style="display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Живі дані -->
+                    </div>
                 </div>
                 
                 <div class="trust-badge">
-                    ⚡ Працюємо з 2024 року • 100% гарантія виплат
+                    ⚡ Працюємо з 2024 • 100% гарантія
                 </div>
                 
                 <div class="online-indicator">
                     <span class="dot"></span>
-                    <span id="onlineNow">128</span> людей зараз на сайті
-                </div>
-            </div>
-
-            <div class="reviews-section">
-                <div class="reviews-header">
-                    <div class="stars">★★★★★</div>
-                    <span style="color: #888;">4.9 (328 відгуків)</span>
-                </div>
-                <div class="reviews-scroll" id="reviewsList">
-                    <div class="review-card">
-                        <div class="review-stars">★★★★★</div>
-                        <div class="review-text">"Все швидко і чесно, вже не перший раз міняю"</div>
-                        <div class="review-author">— Олександр</div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-stars">★★★★★</div>
-                        <div class="review-text">"Найкращий курс в місті, раджу!"</div>
-                        <div class="review-author">— Михайло</div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-stars">★★★★★</div>
-                        <div class="review-text">"Зручно, швидко, без проблем"</div>
-                        <div class="review-author">— Андрій</div>
-                    </div>
+                    <span id="onlineNow">128</span> онлайн зараз
+                    <span style="color: #4caf50; font-size: 0.8rem; margin-left: 5px;" id="onlineTrend">▲</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Модальне вікно входу/реєстрації -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <h2 class="modal-title" id="modalTitle">Вхід</h2>
@@ -547,6 +376,10 @@
             <input type="text" class="modal-input" id="phoneNumber" placeholder="Номер телефону" value="+380">
             <input type="password" class="modal-input" id="password" placeholder="Пароль">
             
+            <div class="forgot-link">
+                <a href="#" onclick="forgotPassword()">Забули пароль?</a>
+            </div>
+            
             <button class="modal-btn" id="actionBtn" onclick="login()">Увійти</button>
             
             <div class="modal-link">
@@ -555,9 +388,24 @@
         </div>
     </div>
 
+    <div id="loading">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div>Зачекайте...</div>
+        </div>
+    </div>
+
     <script>
         let currentRate = { USDT: 46, TON: 80 };
         let isRegisterMode = false;
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
 
         function showLoginModal() {
             document.getElementById('loginModal').classList.add('active');
@@ -584,21 +432,28 @@
             document.getElementById('registerTab').classList.add('active');
         }
 
+        function forgotPassword() {
+            alert('Напишіть адміністратору в Telegram: @swap_support');
+        }
+
         async function login() {
-            const phone = document.getElementById('phoneNumber').value;
-            const password = document.getElementById('password').value;
-            
-            if (!phone || phone.length < 10) {
-                alert('Введіть коректний номер телефону');
-                return;
-            }
-            
-            if (!password || password.length < 4) {
-                alert('Пароль має бути не менше 4 символів');
-                return;
-            }
-            
+            showLoading();
             try {
+                const phone = document.getElementById('phoneNumber').value;
+                const password = document.getElementById('password').value;
+                
+                if (!phone || phone.length < 10) {
+                    alert('Введіть коректний номер телефону');
+                    hideLoading();
+                    return;
+                }
+                
+                if (!password || password.length < 4) {
+                    alert('Пароль має бути не менше 4 символів');
+                    hideLoading();
+                    return;
+                }
+                
                 const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -619,6 +474,8 @@
                 }
             } catch (error) {
                 alert('Помилка з\'єднання');
+            } finally {
+                hideLoading();
             }
         }
 
@@ -639,25 +496,30 @@
                 const response = await fetch('/api/stats');
                 const data = await response.json();
                 
-                const exchangeEl = document.getElementById('successfulExchanges');
-                if (exchangeEl) exchangeEl.textContent = data.totalExchanges.toLocaleString();
+                document.getElementById('successfulExchanges').textContent = data.totalExchanges.toLocaleString();
+                document.getElementById('totalUsers').textContent = data.totalUsers.toLocaleString();
+                document.getElementById('onlineNow').textContent = data.online;
                 
-                const usersEl = document.getElementById('totalUsers');
-                if (usersEl) usersEl.textContent = data.totalUsers.toLocaleString();
+                const trendEl = document.getElementById('onlineTrend');
+                if (trendEl) {
+                    trendEl.textContent = data.onlineTrend;
+                    trendEl.style.color = data.onlineTrend === '▲' ? '#4caf50' : '#ff4444';
+                }
                 
-                const onlineEl = document.getElementById('onlineNow');
-                if (onlineEl) onlineEl.textContent = data.online;
-                
-                const recentEl = document.getElementById('recentExchanges');
-                if (recentEl && data.recentExchanges && data.recentExchanges.length > 0) {
-                    recentEl.innerHTML = data.recentExchanges.map(ex => `
-                        <div class="exchange-item">
+                const transactionsEl = document.getElementById('recentTransactions');
+                if (transactionsEl && data.recentTransactions) {
+                    transactionsEl.innerHTML = data.recentTransactions.map(tx => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #0f0f0f; border-radius: 8px; font-size: 0.9rem;">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span style="color: #4caf50;">●</span>
-                                <span>${ex.amount} ${ex.currency}</span>
+                                <span style="color: #fff;">${tx.user}</span>
+                                <span style="color: #888;">${tx.amount} ${tx.currency}</span>
                             </div>
                             <div style="color: #888;">
-                                ≈ ${ex.uah.toLocaleString()} UAH
+                                ≈ ${tx.uah.toLocaleString()} UAH
+                                <span style="color: #555; font-size: 0.8rem; margin-left: 5px;">
+                                    ${new Date(tx.time).toLocaleTimeString()}
+                                </span>
                             </div>
                         </div>
                     `).join('');
@@ -675,7 +537,7 @@
 
         loadRates();
         updateSocialProof();
-        setInterval(updateSocialProof, 30000);
+        setInterval(updateSocialProof, 10000);
     </script>
 </body>
 </html>
