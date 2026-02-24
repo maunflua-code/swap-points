@@ -269,7 +269,7 @@ app.get('/api/stats', async (req, res) => {
         
         res.json({
             totalExchanges: totalExchanges + 1243,
-            totalUsers,
+            totalUsers: totalUsers + 1300, // +1300 до реальних користувачів
             online: onlineNow,
             onlineTrend: trend,
             recentTransactions: recentTransactions.length > 0 
@@ -305,7 +305,7 @@ app.get('/api/stats', async (req, res) => {
         
         res.json({
             totalExchanges: 1243,
-            totalUsers: 528,
+            totalUsers: 1400, // Якщо база не працює - одразу 1400
             online: Math.floor(Math.random() * 50) + 100,
             onlineTrend: Math.random() > 0.5 ? '▲' : '▼',
             recentTransactions: randomTransactions
